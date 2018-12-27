@@ -1,0 +1,42 @@
+version: '3.3'
+
+services:
+    zoo1:
+        image: zk:v1
+        restart: always
+        hostname: zoo1
+        ports:
+            - 2181:2181
+        environment:
+            ZOO_MY_ID: 1
+            ZOO_SERVERS: server.1=0.0.0.0:2888:3888 server.2=zoo2:2888:3888 server.3=zoo3:2888:3888
+
+    zoo2:
+        image: zk:v1
+        restart: always
+        hostname: zoo2
+        ports:
+            - 2182:2181
+        environment:
+            ZOO_MY_ID: 2
+            ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=0.0.0.0:2888:3888 server.3=zoo3:2888:3888
+
+    zoo3:
+        image: zk:v1
+        restart: always
+        hostname: zoo3
+        ports:
+            - 2183:2181
+        environment:
+            ZOO_MY_ID: 3
+            ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=zoo2:2888:3888 server.3=0.0.0.0:2888:3888
+
+    kafka:
+        image: kafka:v1
+        ports:
+          - "9093"
+        environment：
+          BROKER_ID: 0
+          HOST_NAME: 127.0.0.1
+          LISTENERS: PLAINTEXT://:9093
+          LOG_DIRS: /tmp/kafka/kafka-logs-1
