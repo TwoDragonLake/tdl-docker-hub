@@ -1,0 +1,13 @@
+version: '3.3'
+
+services:
+    redis1:
+        image: redis:v1
+        hostname: redis1
+        ports:
+          - 7001:7001
+        environment:
+          EXE_CREATE_CMD_NODE: "false"
+          PORT: 7001
+        volumes:
+          - ../volumes/redis_7001.pid /var/run/redis_7001.pid

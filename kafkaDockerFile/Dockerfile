@@ -18,7 +18,7 @@ COPY kafka-entrypoint.sh  /data/
 RUN wget -P ${INSTALL_DIR}/  http://mirrors.tuna.tsinghua.edu.cn/apache/kafka/${kafka_version}/kafka_${scala_version}-${kafka_version}.tgz \
     && tar -xzvf kafka_${scala_version}-${kafka_version}.tgz \
     && rm -rf kafka_${scala_version}-${kafka_version}.tgz \
-    && yum -y install dos2unix \
+#   && yum -y install dos2unix \
     && mkdir  /tmp/kafka/ \
  	  && dos2unix  /data/kafka-entrypoint.sh
 

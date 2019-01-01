@@ -1,0 +1,75 @@
+version: '3.3'
+
+services:
+    redis1:
+      image: redis:v1
+      hostname: redis1
+      ports:
+        - 7001:7001
+      environment:
+        PUBLISH_CLUSTER_MODE: "true"
+        EXE_CREATE_CMD_NODE: "true"
+        PORT: 7001
+        NODES: redis1:7001 redis2:7002 redis3:7003 redis4:7004 redis5:7005 redis6:7006
+      volumes:
+        - ../volumes/redis_7001.pid /var/run/redis_7001.pid
+
+    redis2:
+      image: redis:v1
+      hostname: redis2
+      ports:
+        - 7002:7002
+      environment:
+        PUBLISH_CLUSTER_MODE: "true"
+        EXE_CREATE_CMD_NODE: "false"
+        PORT: 7002
+      volumes:
+        - ../volumes/redis_7002.pid /var/run/redis_7002.pid
+
+    redis3:
+      image: redis:v1
+      hostname: redis3
+      ports:
+        - 7003:7003
+      environment:
+        PUBLISH_CLUSTER_MODE: "true"
+        EXE_CREATE_CMD_NODE: "false"
+        PORT: 7003
+      volumes:
+        - ../volumes/redis_7003.pid /var/run/redis_7003.pid
+
+    redis4:
+      image: redis:v1
+      hostname: redis4
+      ports:
+        - 7004:7004
+      environment:
+        PUBLISH_CLUSTER_MODE: "true"
+        EXE_CREATE_CMD_NODE: "false"
+        PORT: 7004
+      volumes:
+        - ../volumes/redis_7004.pid /var/run/redis_7004.pid
+
+    redis5:
+      image: redis:v1
+      hostname: redis5
+      ports:
+        - 7005:7005
+      environment:
+        PUBLISH_CLUSTER_MODE: "true"
+        EXE_CREATE_CMD_NODE: "false"
+        PORT: 7005
+      volumes:
+        - ../volumes/redis_7005.pid /var/run/redis_7005.pid
+
+    redis6:
+      image: redis:v1
+      hostname: redis6
+      ports:
+        - 7006:7006
+      environment:
+        PUBLISH_CLUSTER_MODE: "true"        
+        EXE_CREATE_CMD_NODE: "false"
+        PORT: 7006
+      volumes:
+        - ../volumes/redis_7006.pid /var/run/redis_7006.pid

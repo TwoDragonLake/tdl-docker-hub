@@ -63,5 +63,42 @@ f30a8566c982        kafka:v1            "/data/kafka-entrypo…"   About a minute
 ```
 多物理机部署参考swarm模式：https://docs.docker-cn.com/get-started/part4/#%E5%88%9B%E5%BB%BA%E9%9B%86%E7%BE%A4
 
-## redis
-开发中。。。
+
+
+
+## redisDockerFile
+### 基于jdk8DoclerFile搭建，支持单点和集群启动(redis集群最少6个节点，即redis-cluster模式，参考doc：https://redis.io/topics/cluster-tutorial)
+### 使用:
+#### 构建：
+```
+$docker run -d redis:v1 
+```
+
+#### 当为集群启动时使用如下命令启动：
+```
+$ docker-compose -f redis-cluster-compose.yml up -d
+Creating redisdockfile_redis4_1 ... done
+Creating redisdockfile_redis6_1 ... done
+Creating redisdockfile_redis3_1 ... done
+Creating redisdockfile_redis1_1 ... done
+Creating redisdockfile_redis5_1 ... done
+Creating redisdockfile_redis2_1 ... done
+
+$>docker container ls -a 
+
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                                        NAMES
+90c456fca8f8        redis:v1            "/data/redis-entrypo…"   26 seconds ago      Up 17 seconds       0.0.0.0:7005->7005/tcp                       redisdockfile_redis5_1
+aaa4831bdfef        redis:v1            "/data/redis-entrypo…"   26 seconds ago      Up 17 seconds       0.0.0.0:7006->7006/tcp                       redisdockfile_redis6_1
+4c499fec996b        redis:v1            "/data/redis-entrypo…"   26 seconds ago      Up 19 seconds       0.0.0.0:7003->7003/tcp                       redisdockfile_redis3_1
+e74bf1e8e03f        redis:v1            "/data/redis-entrypo…"   26 seconds ago      Up 17 seconds       0.0.0.0:7001->7001/tcp                       redisdockfile_redis1_1
+8487ef121af3        redis:v1            "/data/redis-entrypo…"   26 seconds ago      Up 19 seconds       0.0.0.0:7002->7002/tcp                       redisdockfile_redis2_1
+5f2d5c667ae6        redis:v1            "/data/redis-entrypo…"   26 seconds ago      Up 21 seconds       0.0.0.0:7004->7004/tcp                       redisdockfile_redis4_1
+
+```
+
+#### 当为单点启动时使用如下命令启动：
+
+```
+$ docker-compose -f redis-single-compose.yml up -d
+```
+
