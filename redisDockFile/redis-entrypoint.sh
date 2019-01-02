@@ -30,10 +30,33 @@ fi
 
 #ping www.sina.com.cn -c1|sed '1{s/[^(]*(//;s/).*//;q}'
 
+
+SERVER1_IP=$(ping www.sina.com.cn -c1|sed '1{s/[^(]*(//;s/).*//;q}')
+echo "SERVER1_IP : $SERVER1_IP"
+
+
+
+
 echo "start redis server ...."
 exec  "${INSTALL_DIR}/redis-${REDIS_VERSIOON}/src/redis-server" "${INSTALL_DIR}/redis-${REDIS_VERSIOON}/redis.conf"
 
 if [[ "$EXE_CREATE_CMD_NODE" == "true" ]]; then
+  space=" "
+  str="$NODES"
+  OLD_IFS="$IFS"
+  IFS=" "
+  array=($str)
+  newStr=""
+  for server in ${array[@]}
+  do
+   echo "$server"
+   IFS=":"
+   inarray=($server)
+   newServer=$(ping ${inarray[0]}  -c1|sed '1{s/[^(]*(//;s/).*//;q}')
+   newStr=$newStr$newServer:${inarray[1]}$space
+  done
+  IFS="$OLD_IFS"
+  NODES=$newStr
   if [[ -z "$NODES" ]]; then
      echo "if config EXE_CREATE_CMD_NODE is true ,must required NODES  environment variable"
      exit 1
