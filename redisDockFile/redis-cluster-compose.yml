@@ -11,8 +11,10 @@ services:
         EXE_CREATE_CMD_NODE: "true"
         PORT: 7001
         NODES: redis1:7001 redis2:7002 redis3:7003 redis4:7004 redis5:7005 redis6:7006
+        LOGFILEDIR: "/tmp/redis"
       volumes:
         - ../volumes/redis_7001.pid /var/run/redis_7001.pid
+        - ../volumes/redis/ /tmp/redis/
 
     redis2:
       image: redis:v1
@@ -68,7 +70,7 @@ services:
       ports:
         - 7006:7006
       environment:
-        PUBLISH_CLUSTER_MODE: "true"        
+        PUBLISH_CLUSTER_MODE: "true"
         EXE_CREATE_CMD_NODE: "false"
         PORT: 7006
       volumes:
