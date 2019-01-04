@@ -67,11 +67,18 @@ f30a8566c982        kafka:v1            "/data/kafka-entrypo…"   About a minute
 
 
 ## redisDockerFile
-### 基于jdk8DoclerFile搭建，支持单点和集群启动(redis集群最少6个节点，即redis-cluster模式，参考doc：https://redis.io/topics/cluster-tutorial)
+### 基于jdk8DoclerFile搭建，支持单点和集群启动(redis集群最少6个节点，即redis-cluster模式，参考doc：https://redis.io/topics/cluster-tutorial),
+
 ### 使用:
+变量：
+PORT: docker容器内redis服务的端口，必填变量。
+EXE_CREATE_CMD_NODE： 启动集群的节点需要配置此变量(设置为true)，用来在该节点执行启动集群命令。参考redis-cluster-compose.yml的redis1配置.
+PUBLISH_CLUSTER_MODE：是否是集群模式部署，true是集群模式。当启动单个redis服务时(docker-compose -f redis-single-compose.yml up -d)，要配置为false，必填变量。
+NODES:配置在EXE_CREATE_CMD_NODE==true的节点，包含了集群中所有的节点配置，EXE_CREATE_CMD_NODE==true时，是必选变量，参考redis-cluster-compose.yml的redis1配置.
+LOGFILEDIR: redis日志文件路径，配置在EXE_CREATE_CMD_NODE==true的节点时，此变量是必选配置，否则无法启动节点。另外还有配置数据卷，参考redis-cluster-compose.yml的redis1配置.
 #### 构建：
 ```
-$docker run -d redis:v1 
+$docker build -t redis:v1 .
 ```
 
 #### 当为集群启动时使用如下命令启动：
@@ -96,9 +103,55 @@ e74bf1e8e03f        redis:v1            "/data/redis-entrypo…"   26 seconds ago
 
 ```
 
+#### 7001端口节点set一个数据:
+```
+>docker container ls -a
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                    NAMES
+a6928d211f85        redis:v1            "/data/redis-entrypo…"   2 minutes ago       Up About a minute   0.0.0.0:7005->7005/tcp   redisdockfile_redis5_1
+8e0e74e17afd        redis:v1            "/data/redis-entrypo…"   2 minutes ago       Up About a minute   0.0.0.0:7003->7003/tcp   redisdockfile_redis3_1
+fbf8574acd84        redis:v1            "/data/redis-entrypo…"   2 minutes ago       Up About a minute   0.0.0.0:7004->7004/tcp   redisdockfile_redis4_1
+292e98146a73        redis:v1            "/data/redis-entrypo…"   2 minutes ago       Up About a minute   0.0.0.0:7001->7001/tcp   redisdockfile_redis1_1
+a268439d1314        redis:v1            "/data/redis-entrypo…"   2 minutes ago       Up About a minute   0.0.0.0:7006->7006/tcp   redisdockfile_redis6_1
+0e567f0ad0c6        redis:v1            "/data/redis-entrypo…"   2 minutes ago       Up About a minute   0.0.0.0:7002->7002/tcp   redisdockfile_redis2_1
+
+>docker exec -it 292e bash
+>[root@redis1 data]# cd /data/redis-5.0.3/
+[root@redis1 src]# ./redis-cli -c -p 7001 -a operater
+Warning: Using a password with '-a' or '-u' option on the command line interface may not be safe.
+127.0.0.1:7001> set key value1
+-> Redirected to slot [12539] located at 172.21.0.5:7003
+OK
+172.21.0.5:7003> get key
+"value1"
+```
+#### 找任意一个子节点查看数据:
+
+```
+>docker exec -it fbf bash
+[root@redis4 data]# cd /data/redis-5.0.3/src/
+[root@redis4 src]# ./redis-cli -c -p 7004 -a operater
+Warning: Using a password with '-a' or '-u' option on the command line interface may not be safe.
+127.0.0.1:7004> get key
+-> Redirected to slot [12539] located at 172.21.0.5:7003
+"value1"
+```
+关闭：
+```
+docker-compose -f redis-cluster-compose.yml stop
+```
+
+
 #### 当为单点启动时使用如下命令启动：
 
 ```
 $ docker-compose -f redis-single-compose.yml up -d
 ```
+关闭：
+```
+docker-compose -f redis-single-compose.yml stop
+```
 
+ yum install -y git
+ git clone https://github.com/TwoDragonLake/kafka-manager.git  /data/kafka-manager
+ yum isntall -y which
+ 

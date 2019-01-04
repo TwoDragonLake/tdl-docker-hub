@@ -81,11 +81,12 @@ if [[ "$EXE_CREATE_CMD_NODE" == "true" ]]; then
   cd ${INSTALL_DIR}/redis-${REDIS_VERSIOON}/src/
 
   expect -c "set timeout -1;
-      spawn ./redis-cli --cluster create  $NEW_NODES;
+      spawn ./redis-cli --cluster create  $NEW_NODES --cluster-replicas 1 -a operater;
       expect {
-          *yes* {send -- yes\r;exp_continue;}
-          eof        {exit 0;}
+          *yes* {send \"yes\r\";exp_continue;}
+          eof   {exit 0;}
       }";
+  echo "tail redis.log ...."
   tail -f "$LOGFILEDIR/redis.log"
 
 fi
