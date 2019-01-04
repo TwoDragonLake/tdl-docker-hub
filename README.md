@@ -71,11 +71,11 @@ f30a8566c982        kafka:v1            "/data/kafka-entrypo…"   About a minute
 
 ### 使用:
 变量：
-PORT: docker容器内redis服务的端口，必填变量。
-EXE_CREATE_CMD_NODE： 启动集群的节点需要配置此变量(设置为true)，用来在该节点执行启动集群命令。参考redis-cluster-compose.yml的redis1配置.
-PUBLISH_CLUSTER_MODE：是否是集群模式部署，true是集群模式。当启动单个redis服务时(docker-compose -f redis-single-compose.yml up -d)，要配置为false，必填变量。
-NODES:配置在EXE_CREATE_CMD_NODE==true的节点，包含了集群中所有的节点配置，EXE_CREATE_CMD_NODE==true时，是必选变量，参考redis-cluster-compose.yml的redis1配置.
-LOGFILEDIR: redis日志文件路径，配置在EXE_CREATE_CMD_NODE==true的节点时，此变量是必选配置，否则无法启动节点。另外还有配置数据卷，参考redis-cluster-compose.yml的redis1配置.
+- PORT: docker容器内redis服务的端口，必填变量。
+- EXE_CREATE_CMD_NODE： 启动集群的节点需要配置此变量(设置为true)，用来在该节点执行启动集群命令。参考redis-cluster-compose.yml的redis1配置.
+- PUBLISH_CLUSTER_MODE：是否是集群模式部署，true是集群模式。当启动单个redis服务时(docker-compose -f redis-single-compose.yml up -d)，要配置为false，必填变量。
+- NODES:配置在EXE_CREATE_CMD_NODE==true的节点，包含了集群中所有的节点配置，EXE_CREATE_CMD_NODE==true时，是必选变量，参考redis-cluster-compose.yml的redis1配置.
+- LOGFILEDIR: redis日志文件路径，配置在EXE_CREATE_CMD_NODE==true的节点时，此变量是必选配置，否则无法启动节点。另外还有配置数据卷，参考redis-cluster-compose.yml的redis1配置.
 #### 构建：
 ```
 $docker build -t redis:v1 .
@@ -150,6 +150,7 @@ $ docker-compose -f redis-single-compose.yml up -d
 ```
 docker-compose -f redis-single-compose.yml stop
 ```
+
 
  yum install -y git
  git clone https://github.com/TwoDragonLake/kafka-manager.git  /data/kafka-manager
