@@ -25,7 +25,8 @@ RUN alternatives --install /usr/bin/java java ${JAVA_HOME}/bin/java 1 \
     && yum -y install dos2unix gcc automake autoconf libtool make  gcc-c++  \
     && yum install -y expect \
     && yum install -y git \
-    && yum isntall -y which
+    && yum install -y which \
+    && yum install -y unzip
 
 ONBUILD RUN 	yum install net-tools -y \
 							&& yum install -y wget

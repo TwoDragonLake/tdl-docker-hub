@@ -1,0 +1,20 @@
+version: '3.3'
+
+services:
+    zoo1:
+        image: zk:v1
+        restart: always
+        hostname: zoo1
+        ports:
+          - 2181:2181
+
+    kafka-manager:
+        image: kafka-manager:v1
+        ports:
+          - "9000:9000"
+        environment:
+          ZK_HOSTS: zoo1:2181
+          APPLICATION_SECRET: letmein
+          KM_ARGS: -Djava.net.preferIPv4Stack=true
+          KM_USERNAME: admin
+          KM_PASSWORD: operater
